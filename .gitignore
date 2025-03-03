@@ -1,0 +1,17 @@
+# Папки и файлы, которые не следует отслеживать
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+db.sqlite3
+*.log
+*.pot
+*.pyc
+*.sqlite3
+*.db
+venv/
+.env/
+*.env
+.DS_Store
+../.idea/
+*.sqlite3-journal
