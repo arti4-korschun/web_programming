@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Подключение jQuery для AJAX -->
+    <script>
+        // Валидация email и пароля на лету
+        function validateEmail() {
+            let email = $('#email').val();
+            let emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+            if (!emailPattern.test(email)) {
+                $('#emailError').text('Неверный формат электронной почты');
+            } else {
+                $('#emailError').text('');
+            }
+        }
+
+        function validatePassword() {
+            let password = $('#password').val();
+            if (password.length < 6) {
+                $('#passwordError').text('Пароль должен быть не менее 6 символов');
+            } else {
+                $('#passwordError').text('');
+            }
+        }
+
+        function validateUsername() {
+            let username = $('#username').val();
+            $.ajax({
+                url: '{% url "check_username" %}',  // URL для проверки логина на сервере
+                method: 'POST',
+                data: {
+                    'username': username,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function(response) {
+                    if (response.exists) {
+                        $('#usernameError').text('Этот логин уже занят');
+                    } else {
+                        $('#usernameError').text('');
+                    }
+                },
+                async: true  // Асинхронный запрос
+            });
+        }
+
+        $(document).ready(function() {
+            // Валидация по мере ввода данных
+            $('#email').on('input', function() {
+                validateEmail();
+            });
+
+            $('#password').on('input', function() {
+                validatePassword();
+            });
+
+            $('#username').on('input', function() {
+                validateUsername();
+            });
+
+            // Отправка формы только если валидация прошла успешно
+            $('form').on('submit', function(e) {
+                // Если есть ошибки, не отправляем форму
+                if ($('#usernameError').text() || $('#emailError').text() || $('#passwordError').text()) {
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>Регистрация</h1>
+
+    <!-- Форма для регистрации -->
+    <form method="POST">
+        {% csrf_token %}
+
+        <!-- Поле для логина -->
+        <label for="username">Логин:</label>
+        <input type="text" name="username" id="username" required>
+        <span id="usernameError" style="color: red;"></span><br>
+
+        <!-- Поле для имени -->
+        <label for="name">Имя:</label>
+        <input type="text" name="name" id="name" required><br>
+
+        <!-- Поле для электронной почты -->
+        <label for="email">Электронная почта:</label>
+        <input type="email" name="email" id="email" required>
+        <span id="emailError" style="color: red;"></span><br>
+
+        <!-- Поле для пароля -->
+        <label for="password">Пароль:</label>
+        <input type="password" name="password" id="password" required>
+        <span id="passwordError" style="color: red;"></span><br>
+
+        <!-- Кнопка для отправки формы -->
+        <button type="submit">Зарегистрироваться</button>
+    </form>
+
+    <!-- Ссылка на страницу входа -->
+    <p>Уже есть аккаунт? <a href="{% url 'login_user' %}">Войдите</a></p>
+</body>
+</html>

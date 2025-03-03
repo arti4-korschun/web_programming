@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Книжный магазин</title>
+</head>
+<body>
+    <h1>Каталог книг</h1>
+
+    {% if user %}
+        <a>Привет, {{ user.username }}!</a>  <!-- Имя пользователя -->
+        <a href="{% url 'logout_user' %}" class="btn btn-danger">Выход</a> <!-- Кнопка выхода -->
+        <p><a href="{% url 'book_create' %}" class="btn btn-primary">Добавить книгу</a></p> <!-- Кнопка добавления книги -->
+    {% else %}
+        <p>Для добавления или редактирования книг, пожалуйста, <a href="{% url 'login_user' %}">войдите</a> или <a href="{% url 'register' %}">зарегистрируйтесь</a>.</p>
+    {% endif %}
+
+    <!-- Фильтры и сортировка -->
+    <div>
+        <form method="get">
+            <label for="sort_by">Сортировать по:</label>
+            <select name="sort_by" id="sort_by">
+                <option value="title" {% if sort_by == 'title' %}selected{% endif %}>Названию</option>
+                <option value="author" {% if sort_by == 'author' %}selected{% endif %}>Автору</option>
+                <option value="price" {% if sort_by == 'price' %}selected{% endif %}>Цене</option>
+            </select>
+
+            <label for="order">Порядок:</label>
+            <select name="order" id="order">
+                <option value="asc" {% if order == 'asc' %}selected{% endif %}>По возрастанию</option>
+                <option value="desc" {% if order == 'desc' %}selected{% endif %}>По убыванию</option>
+            </select>
+
+            <button type="submit">Применить</button>
+        </form>
+    </div>
+
+    <ul>
+        {% for book in page_obj %}
+            <li>
+                {{ book.title }} — {{ book.author }} ({{ book.price }} руб.)
+                {% if user %}
+                    {% if user.isAdmin %}
+                        <a href="{% url 'book_update' book.pk %}">Изменить</a>
+                        <a href="{% url 'book_delete' book.pk %}">Удалить</a>
+                    {% endif %}
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+
+    <div>
+        {% if page_obj.has_previous %}
+            <a href="?page=1&sort_by={{ sort_by }}&order={{ order }}">Первая</a>
+            <a href="?page={{ page_obj.previous_page_number }}&sort_by={{ sort_by }}&order={{ order }}">Назад</a>
+        {% endif %}
+
+        Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}&sort_by={{ sort_by }}&order={{ order }}">Вперед</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}&sort_by={{ sort_by }}&order={{ order }}">Последняя</a>
+        {% endif %}
+    </div>
+</body>
+</html>
