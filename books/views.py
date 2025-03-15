@@ -159,7 +159,7 @@ def register(request):
         if User.objects.filter(username=username).exists():
             return render(request, 'books/register.html', {'error': 'Логин уже занят'})
 
-        hashed_password = hash_password(password)  # Используем новую функцию
+        hashed_password = hash_password(password)
         user = User(username=username, password=hashed_password, email=email, name=name, isAdmin=is_admin)
         user.save()
 
