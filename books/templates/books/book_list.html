@@ -8,16 +8,29 @@
     <h1>Каталог книг</h1>
 
     {% if user %}
-        <a>Привет, {{ user.username }}!</a>  <!-- Имя пользователя -->
-        <a href="{% url 'logout_user' %}" class="btn btn-danger">Выход</a> <!-- Кнопка выхода -->
-        <p><a href="{% url 'book_create' %}" class="btn btn-primary">Добавить книгу</a></p> <!-- Кнопка добавления книги -->
+        <a>Привет, {{ user.username }}!</a>
+        <a href="{% url 'logout_user' %}" class="btn btn-danger">Выход</a>
+        <p><a href="{% url 'book_create' %}" class="btn btn-primary">Добавить книгу</a></p>
     {% else %}
         <p>Для добавления или редактирования книг, пожалуйста, <a href="{% url 'login_user' %}">войдите</a> или <a href="{% url 'register' %}">зарегистрируйтесь</a>.</p>
     {% endif %}
 
-    <!-- Фильтры и сортировка -->
     <div>
         <form method="get">
+            <label for="title">Фильтровать по названию:</label>
+            <input type="text" name="title" id="title" value="{{ title_filter }}"><br>
+
+            <label for="author">Фильтровать по автору:</label>
+            <input type="text" name="author" id="author" value="{{ author_filter }}"><br>
+
+            <label for="min_price">Минимальная цена:</label>
+            <input type="number" name="min_price" id="min_price" value="{{ min_price }}"><br>
+
+            <label for="max_price">Максимальная цена:</label>
+            <input type="number" name="max_price" id="max_price" value="{{ max_price }}"><br>
+
+            <button type="submit">Поиск</button> <br>
+
             <label for="sort_by">Сортировать по:</label>
             <select name="sort_by" id="sort_by">
                 <option value="title" {% if sort_by == 'title' %}selected{% endif %}>Названию</option>
@@ -51,15 +64,15 @@
 
     <div>
         {% if page_obj.has_previous %}
-            <a href="?page=1&sort_by={{ sort_by }}&order={{ order }}">Первая</a>
-            <a href="?page={{ page_obj.previous_page_number }}&sort_by={{ sort_by }}&order={{ order }}">Назад</a>
+            <a href="?page=1&sort_by={{ sort_by }}&order={{ order }}&title={{ title_filter }}&author={{ author_filter }}&min_price={{ min_price }}&max_price={{ max_price }}">Первая</a>
+            <a href="?page={{ page_obj.previous_page_number }}&sort_by={{ sort_by }}&order={{ order }}&title={{ title_filter }}&author={{ author_filter }}&min_price={{ min_price }}&max_price={{ max_price }}">Назад</a>
         {% endif %}
 
         Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
 
         {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}&sort_by={{ sort_by }}&order={{ order }}">Вперед</a>
-            <a href="?page={{ page_obj.paginator.num_pages }}&sort_by={{ sort_by }}&order={{ order }}">Последняя</a>
+            <a href="?page={{ page_obj.next_page_number }}&sort_by={{ sort_by }}&order={{ order }}&title={{ title_filter }}&author={{ author_filter }}&min_price={{ min_price }}&max_price={{ max_price }}">Вперед</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}&sort_by={{ sort_by }}&order={{ order }}&title={{ title_filter }}&author={{ author_filter }}&min_price={{ min_price }}&max_price={{ max_price }}">Последняя</a>
         {% endif %}
     </div>
 </body>

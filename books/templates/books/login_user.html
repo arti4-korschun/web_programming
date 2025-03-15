@@ -7,27 +7,25 @@
 <body>
     <h1>Вход в систему</h1>
 
-    <!-- Форма для входа -->
     <form method="POST">
         {% csrf_token %}
-        <!-- Поле для логина -->
+
         <label for="username">Логин:</label>
         <input type="text" name="username" id="username" required><br>
 
-        <!-- Поле для пароля -->
         <label for="password">Пароль:</label>
         <input type="password" name="password" id="password" required><br>
 
-        <!-- Кнопка для отправки формы -->
         <button type="submit">Войти</button>
     </form>
 
-    <!-- Сообщение об ошибке -->
     {% if error %}
         <p style="color: red;">{{ error }}</p>
     {% endif %}
 
-    <!-- Ссылка на страницу регистрации -->
     <p>Нет аккаунта? <a href="{% url 'register' %}">Зарегистрируйтесь</a></p>
+
+    <a href="{% url 'book_list' %}">Вернуться на главную</a>
+
 </body>
 </html>

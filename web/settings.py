@@ -77,23 +77,13 @@ WSGI_APPLICATION = 'web.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-"""DATABASES = {
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'books',
         'USER': 'root',
         'PASSWORD': '1234',
         'HOST': 'localhost',
-        'PORT': '3306',
-    }
-}"""
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'books',
-        'USER': 'arti4',
-        'PASSWORD': 'temich2004',
-        'HOST': 'arti4.mysql.pythonanywhere-services.com',
         'PORT': '3306',
     }
 }

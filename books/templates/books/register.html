@@ -5,7 +5,6 @@
     <title>Регистрация</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Подключение jQuery для AJAX -->
     <script>
-        // Валидация email и пароля на лету
         function validateEmail() {
             let email = $('#email').val();
             let emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
@@ -27,8 +26,8 @@
 
         function validateUsername() {
             let username = $('#username').val();
-            $.ajax({
-                url: '{% url "check_username" %}',  // URL для проверки логина на сервере
+            $.ajax({ // Отправляет запрос на сервер
+                url: '{% url "check_username" %}',
                 method: 'POST',
                 data: {
                     'username': username,
@@ -41,12 +40,11 @@
                         $('#usernameError').text('');
                     }
                 },
-                async: true  // Асинхронный запрос
+                async: true
             });
         }
 
         $(document).ready(function() {
-            // Валидация по мере ввода данных
             $('#email').on('input', function() {
                 validateEmail();
             });
@@ -59,9 +57,7 @@
                 validateUsername();
             });
 
-            // Отправка формы только если валидация прошла успешно
             $('form').on('submit', function(e) {
-                // Если есть ошибки, не отправляем форму
                 if ($('#usernameError').text() || $('#emailError').text() || $('#passwordError').text()) {
                     e.preventDefault();
                 }
@@ -72,34 +68,33 @@
 <body>
     <h1>Регистрация</h1>
 
-    <!-- Форма для регистрации -->
     <form method="POST">
         {% csrf_token %}
 
-        <!-- Поле для логина -->
         <label for="username">Логин:</label>
         <input type="text" name="username" id="username" required>
         <span id="usernameError" style="color: red;"></span><br>
 
-        <!-- Поле для имени -->
         <label for="name">Имя:</label>
         <input type="text" name="name" id="name" required><br>
 
-        <!-- Поле для электронной почты -->
         <label for="email">Электронная почта:</label>
         <input type="email" name="email" id="email" required>
         <span id="emailError" style="color: red;"></span><br>
 
-        <!-- Поле для пароля -->
         <label for="password">Пароль:</label>
         <input type="password" name="password" id="password" required>
         <span id="passwordError" style="color: red;"></span><br>
 
-        <!-- Кнопка для отправки формы -->
+        <!--
+        <label for="isAdmin">Администратор:</label>
+        <input type="checkbox" name="isAdmin" id="isAdmin" checked><br>
+        -->
+
         <button type="submit">Зарегистрироваться</button>
     </form>
 
-    <!-- Ссылка на страницу входа -->
     <p>Уже есть аккаунт? <a href="{% url 'login_user' %}">Войдите</a></p>
+    <a href="{% url 'book_list' %}">Вернуться на главную</a>
 </body>
 </html>

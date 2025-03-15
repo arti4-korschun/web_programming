@@ -15,7 +15,7 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('logout/', views.logout_user, name='logout_user'),
 
-    # Стандартный путь для входа, перенаправляем на login_user
+    # Стандартный путь для входа
     path('accounts/login/', auth_views.LoginView.as_view(template_name='books/login_user.html'), name='login'),
     path('check_username/', check_username, name='check_username'),
 ]
