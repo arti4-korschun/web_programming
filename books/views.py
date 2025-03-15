@@ -22,13 +22,12 @@ def book_list(request):
     # Получаем параметры сортировки и фильтрации
     sort_by = request.GET.get('sort_by', 'title')
     order = request.GET.get('order', 'asc')
-    title_filter = request.GET.get('title', '')  # Фильтрация по названию
-    author_filter = request.GET.get('author', '')  # Фильтрация по автору
-    min_price = request.GET.get('min_price', '')  # Минимальная цена
-    max_price = request.GET.get('max_price', '')  # Максимальная цена
+    title_filter = request.GET.get('title', '')
+    author_filter = request.GET.get('author', '')
+    min_price = request.GET.get('min_price', '')
+    max_price = request.GET.get('max_price', '')
 
-    # Формируем условия для фильтрации
-    books = Book.objects.all()
+    books = Book.objects.all() # условия для фильтрации
 
     if title_filter:
         books = books.filter(title__icontains=title_filter)
